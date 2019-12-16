@@ -1,0 +1,20 @@
+#!groovy
+//Check node properties
+properties([disableConcurrentBuilds()])
+
+pipeline {
+  agent {
+         label 'master'
+  }
+  options {
+     builDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+	 timestamps() 
+  }
+  stages {
+    stage ('First step') {
+      steps {
+        sh 'ssh e217681@34.66.71.86 \'hostname\''
+      }
+    }
+  }
+}
