@@ -12,6 +12,7 @@ pipeline {
   }
   stages {
     stage ('create docker image') {
+    git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
       steps {
 	    echo "============ start building images"
 		dir ('docker/toolbox'){
