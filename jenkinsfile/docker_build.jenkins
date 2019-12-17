@@ -11,9 +11,20 @@ pipeline {
 	 timestamps() 
   }
   stages {
+    stage ("docker_login"){
+      steps {
+       echo "============= docker login ============="
+         withCredentials([usernamePassword(credentialsId: 'dockerhub_eblaghodir', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+         sh """
+         docker login -u $USERNAME -p $PASSWORD
+         """ 
+         } 
+      }  
+    }
+  }
     stage ('create docker image') {
      //# git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
-      steps {
+       steps {
 	    echo "============ start building images"
 		dir ('docker/toolbox'){
 		     sh 'docker build . -t eblaghodir/toolbox:latest'
@@ -21,6 +32,15 @@ pipeline {
         
       }
     }
-	
-  }
+     stage ('docker_push') {
+     //# git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
+       steps {
+            echo "============ pushing image to dockerhub"
+            sh """    
+            docker build . -t eblaghodir/toolbox:latest
+            """    
+
+      }
+    }	
+  
 }
