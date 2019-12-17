@@ -12,6 +12,7 @@ pipeline {
   stages {
     stage ("docker_login"){
       steps {
+       echo "============= ${BUILD_ID}"
        echo "============= docker login ============="
          withCredentials([usernamePassword(credentialsId: 'dockerhub_eblaghodir', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
          sh """
