@@ -1,0 +1,46 @@
+//Run docker build auto
+properties([disableConcurrentBuilds()])
+
+pipeline {
+  agent {
+         label 'master'
+  }
+  options {
+     buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+	 timestamps() 
+  }
+  stages {
+    stage ("docker_login"){
+      steps {
+       echo "============= docker login ============="
+         withCredentials([usernamePassword(credentialsId: 'dockerhub_eblaghodir', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
+         sh """
+         docker login -u $USERNAME -p $PASSWORD
+         """ 
+         } 
+      }  
+    }
+  
+    stage ('create docker image') {
+     //# git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
+       steps {
+	    echo "============ start building images"
+		dir ('docker/toolbox'){
+		     sh 'docker build . -t eblaghodir/toolbox:latest'
+		}
+        
+      }
+    }
+     stage ('docker_push') {
+     //# git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
+       steps {
+            echo "============ pushing image to dockerhub"
+            sh """    
+            docker push eblaghodir/toolbox:latest
+            """    
+
+      }
+    }
+   }	
+  
+}
