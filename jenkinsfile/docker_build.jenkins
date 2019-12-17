@@ -21,7 +21,7 @@ pipeline {
          } 
       }  
     }
-  }
+  
     stage ('create docker image') {
      //# git url: 'https://github.com/evgenblaghodir/project_template', branch: 'master'
        steps {
@@ -41,6 +41,7 @@ pipeline {
             """    
 
       }
-    }	
+    }
+   }	
   
 }
