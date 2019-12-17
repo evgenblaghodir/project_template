@@ -27,7 +27,7 @@ pipeline {
        steps {
 	    echo "============ start building images"
 		dir ('docker/toolbox'){
-		     sh 'docker build . -t eblaghodir/toolbox:latest'
+		     sh 'docker build . -t eblaghodir/toolbox:${BUILD_ID}'
 		}
         
       }
@@ -37,7 +37,7 @@ pipeline {
        steps {
             echo "============ pushing image to dockerhub"
             sh """    
-            docker push eblaghodir/toolbox:latest
+            docker push eblaghodir/toolbox:${BUILD_ID}
             """    
 
       }
